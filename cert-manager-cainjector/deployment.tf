@@ -51,7 +51,7 @@ resource "kubernetes_deployment" "deployment" {
         volume {
           name = "service-token"
           secret {
-            secret_name = data.kubernetes_secret_v1.service_account_current_secret.metadata.name
+            secret_name = data.kubernetes_secret_v1.service_account_current_secret.metadata.0.name
           }
         }
       }
@@ -62,8 +62,8 @@ resource "kubernetes_deployment" "deployment" {
 data "kubernetes_secret_v1" "service_account_current_secret" {
   metadata {
     annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account_v1.service_account.metadata.name
-      "kubernetes.io/service-account.uid" = kubernetes_service_account_v1.service_account.metadata.uid
+      "kubernetes.io/service-account.name" = kubernetes_service_account_v1.service_account.metadata.0.name
+      "kubernetes.io/service-account.uid" = kubernetes_service_account_v1.service_account.metadata.0.uid
     }    
   }
 }
