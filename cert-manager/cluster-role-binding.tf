@@ -12,8 +12,8 @@ resource "kubernetes_cluster_role_binding" "issuers_cluster_role_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
 
@@ -31,8 +31,8 @@ resource "kubernetes_cluster_role_binding" "clusterissuers_cluster_role_binding"
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
 
@@ -50,8 +50,8 @@ resource "kubernetes_cluster_role_binding" "certificates_cluster_role_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
 
@@ -69,8 +69,8 @@ resource "kubernetes_cluster_role_binding" "orders_cluster_role_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
 
@@ -88,8 +88,8 @@ resource "kubernetes_cluster_role_binding" "challenges_cluster_role_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
 
@@ -107,7 +107,7 @@ resource "kubernetes_cluster_role_binding" "ingress-shim_cluster_role_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
