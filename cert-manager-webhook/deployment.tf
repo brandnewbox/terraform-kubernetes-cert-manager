@@ -68,7 +68,7 @@ resource "kubernetes_deployment" "deployment" {
         volume {
           name = "service-token"
           secret {
-            secret_name = kubernetes_secret_v1.service_account_current_secret.metadata.name
+            secret_name = data.kubernetes_secret_v1.service_account_current_secret.metadata.name
           }
         }
       }
