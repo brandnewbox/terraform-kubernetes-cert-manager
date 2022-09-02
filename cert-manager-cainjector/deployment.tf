@@ -62,5 +62,6 @@ resource "kubernetes_deployment" "deployment" {
 data "kubernetes_service_account_v1" "service_account" {
   metadata {
     name = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }
