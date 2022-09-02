@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "deployment" {
         }, local.labels)
       }
       spec {
-        service_account_name            = kubernetes_service_account.service_account.metadata.0.name
+        service_account_name            = kubernetes_service_account_v1.service_account.metadata.0.name
         automount_service_account_token = false
         container {
           name              = var.name
@@ -51,7 +51,7 @@ resource "kubernetes_deployment" "deployment" {
         volume {
           name = "service-token"
           secret {
-            secret_name = kubernetes_service_account.service_account.default_secret_name
+            secret_name = kubernetes_service_account_v1.service_account.default_secret_name
           }
         }
       }

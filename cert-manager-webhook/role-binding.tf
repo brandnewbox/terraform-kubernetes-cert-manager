@@ -14,7 +14,7 @@ resource "kubernetes_role_binding" "role_binding" {
   subject {
     api_group = ""
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.service_account.metadata.0.name
-    namespace = kubernetes_service_account.service_account.metadata.0.namespace
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
   }
 }

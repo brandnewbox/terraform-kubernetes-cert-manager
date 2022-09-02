@@ -1,6 +1,6 @@
 resource "kubectl_manifest" "validating_webhook_configuration" {
   yaml_body = <<YAML
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata: 
   name: "${var.name}"
@@ -26,7 +26,7 @@ webhooks:
     apiVersions: ["v1alpha2"]
     operations:  ["CREATE", "UPDATE"]
     resources:   ["*/*"]
-  admissionReviewVersions: ["v1", "v1beta1"]
+  admissionReviewVersions: ["v1"]
   failurePolicy: "Fail"
   sideEffects: "None"
   clientConfig:
