@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "deployment" {
           image_pull_policy = var.image_pull_policy
           args = [
             "--v=2",
-            "--leader-election-namespace=$(POD_NAMESPACE)"
+            "--leader-election-namespace=${var.leader_election_namespace}"
           ]
           env {
             name  = "POD_NAMESPACE"
