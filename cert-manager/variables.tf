@@ -27,3 +27,7 @@ variable "image_pull_policy" {
 variable "labels" {
   type = map(string)
 }
+variable "leader_election_namespace" {
+  type = string
+  default = "kube-system"
+}
