@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "deployment" {
           args = [
             "--v=2",
             "--cluster-resource-namespace=$(POD_NAMESPACE)",
-            "--leader-election-namespace=kube-system"
+            "--leader-election-namespace=$(POD_NAMESPACE)°"
           ]
           port {
             protocol       = "TCP"
