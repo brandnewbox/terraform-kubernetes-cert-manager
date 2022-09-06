@@ -33,6 +33,6 @@ webhooks:
     service:
       name: "${var.name}"
       namespace: "${var.namespace}"
-      path: "/mutate"
+      path: "/validate"
 YAML
 }
