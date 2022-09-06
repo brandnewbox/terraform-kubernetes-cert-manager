@@ -1,7 +1,5 @@
 resource "kubernetes_deployment" "deployment" {
   metadata {
-    name      = var.name
-    namespace = var.namespace
     labels = merge({
       "app.kubernetes.io/name" = var.name
     }, local.labels)
@@ -11,16 +9,13 @@ resource "kubernetes_deployment" "deployment" {
     replicas = 1
     selector {
       match_labels = {
-        app                            = local.app
         "app.kubernetes.io/name"       = var.name
         "app.kubernetes.io/instance"   = var.instance_id
-        "app.kubernetes.io/managed-by" = "terraform"
+        "app.kubernetes.io/component"  = var.component
       }
     }
     template {
       metadata {
-        name      = var.name
-        namespace = var.namespace
         labels = merge({
           "app.kubernetes.io/name" = var.name
         }, local.labels)
@@ -32,7 +27,15 @@ resource "kubernetes_deployment" "deployment" {
       }
       spec {
         service_account_name            = kubernetes_service_account_v1.service_account.metadata.0.name
-        automount_service_account_token = false
+
+        security_context {
+          run_as_non_root = true
+        }
+
+        node_selector = {
+          "kubernetes.io/os" = "linux"
+        }
+
         container {
           name              = var.name
           image             = "${local.image_repository}/${var.image_name}:${var.image_tag}"
@@ -45,10 +48,21 @@ resource "kubernetes_deployment" "deployment" {
           port {
             protocol       = "TCP"
             container_port = 9402
+            name           = "http-metrics"
           }
           env {
             name  = "POD_NAMESPACE"
-            value = var.namespace
+
+            value_from {
+              field_ref {
+                api_version = "v1"
+                field_path = "metadata.namespace"
+              }
+            }
+          }
+
+          security_context {
+            allow_privilege_escalation = false
           }
 
           resources {
@@ -56,17 +70,6 @@ resource "kubernetes_deployment" "deployment" {
               cpu    = "10m"
               memory = "32Mi"
             }
-          }
-          volume_mount {
-            name       = "service-token"
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount/"
-            read_only  = true
-          }
-        }
-        volume {
-          name = "service-token"
-          secret {
-            secret_name = data.kubernetes_service_account_v1.service_account.secret.0.name
           }
         }
       }

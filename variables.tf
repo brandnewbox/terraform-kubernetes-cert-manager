@@ -11,7 +11,7 @@ variable "namespace_annotations" {
 
 variable "manager_image_tag" {
   type    = string
-  default = "v1.8.1" #"v1.0.2" #"v0.13.0"
+  default = "v1.9.1" #"v1.0.2" #"v0.13.0"
 }
 variable "manager_image_name" {
   type    = string
@@ -45,7 +45,7 @@ variable "image_repository" {
 variable "image_pull_policy" {
   type        = string
   description = "Determines when the image should be pulled prior to starting the container. `Always`: Always pull the image. | `IfNotPresent`: Only pull the image if it does not already exist on the node. | `Never`: Never pull the image"
-  default     = "Always"
+  default     = "IfNotPresent"
 }
 variable "labels" {
   type        = map(string)

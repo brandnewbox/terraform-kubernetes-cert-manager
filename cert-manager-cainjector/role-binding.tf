@@ -1,7 +1,7 @@
 resource "kubernetes_role_binding" "role_binding" {
   metadata {
     name      = "${var.name}:leaderelection"
-    namespace = var.leader_election_namespace
+    namespace = var.namespace
     labels = merge({
       "app.kubernetes.io/name" = var.name
     }, local.labels)
