@@ -75,65 +75,6 @@ resource "kubernetes_cluster_role" "clusterissuers_cluster_role" {
   }
 }
 
-resource "kubernetes_cluster_role" "certificates_cluster_role" {
-  metadata {
-    name = "${var.name}-certificates"
-    labels = merge({
-      "app.kubernetes.io/name" = var.name
-    }, local.labels)
-  }
-  rule {
-    api_groups = ["cert-manager.io"]
-    resources = [
-      "certificates",
-      "certificates/status",
-      "certificaterequests",
-      "certificaterequests/status"
-    ]
-    verbs = ["update"]
-  }
-  # We require these rules to support users with the OwnerReferencesPermissionEnforcement
-  # admission controller enabled:
-  # https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement
-  rule {
-    api_groups = ["cert-manager.io"]
-    resources = [
-      "certificates/finalizers",
-      "certificaterequests/finalizers"
-    ]
-    verbs = ["get", "list", "watch"]
-  }
-  rule {
-    api_groups = ["cert-manager.io"]
-    resources = [
-      "certificates/finalizers",
-      "certificaterequests/finalizers"
-    ]
-    verbs = ["update"]
-  }
-  rule {
-    api_groups = ["acme.cert-manager.io"]
-    resources = [
-      "orders"
-    ]
-    verbs = ["create", "delete", "get", "list", "watch"]
-  }
-  rule {
-    api_groups = [""]
-    resources = [
-      "secrets"
-    ]
-    verbs = ["get", "list", "watch", "create", "update", "delete"]
-  }
-  rule {
-    api_groups = [""]
-    resources = [
-      "events"
-    ]
-    verbs = ["create", "patch"]
-  }
-}
-
 resource "kubernetes_cluster_role" "orders_cluster_role" {
   metadata {
     name = "${var.name}-controller-orders"
@@ -378,5 +319,103 @@ resource "kubernetes_cluster_role" "edit_cluster_role" {
       "issuers"
     ]
     verbs = ["create", "delete", "deletecollection", "patch", "update"]
+  }
+}
+
+resource "kubernetes_cluster_role" "approve" {
+  metadata {
+    name = "${var.name}-approve:cert-manager-io"
+    labels = merge({
+      "app.kubernetes.io/name"                       = var.name
+    }, local.labels)
+  }
+  rule {
+    api_groups = ["cert-manager.io"]
+    resource_names = [
+      "issuers.cert-manager.io/*",
+      "clusterissuers.cert-manager.io/*"
+    ]
+    resources = [
+      "signers"
+    ]
+    verbs = ["approve"]
+  }
+}
+
+resource "kubernetes_cluster_role" "controller_certificates" {
+  metadata {
+    name = "${var.name}-controller-certificates"
+    labels = merge({
+      "app.kubernetes.io/name"                       = var.name
+    }, local.labels)
+  }
+  rule {
+    verbs      = ["update", "patch"]
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates", "certificates/status", "certificaterequests", "certificaterequests/status"]
+  }
+
+  rule {
+    verbs      = ["get", "list", "watch"]
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates", "certificaterequests", "clusterissuers", "issuers"]
+  }
+
+  rule {
+    verbs      = ["update"]
+    api_groups = ["cert-manager.io"]
+    resources  = ["certificates/finalizers", "certificaterequests/finalizers"]
+  }
+
+  rule {
+    verbs      = ["create", "delete", "get", "list", "watch"]
+    api_groups = ["acme.cert-manager.io"]
+    resources  = ["orders"]
+  }
+
+  rule {
+    verbs      = ["get", "list", "watch", "create", "update", "delete", "patch"]
+    api_groups = [""]
+    resources  = ["secrets"]
+  }
+
+  rule {
+    verbs      = ["create", "patch"]
+    api_groups = [""]
+    resources  = ["events"]
+  }
+}
+
+resource "kubernetes_cluster_role" "controller_certificatesigningrequests" {
+  metadata {
+    name = "${var.name}-controller-certificatesigningrequests"
+    labels = merge({
+      "app.kubernetes.io/name"                       = var.name
+    }, local.labels)
+  }
+
+  rule {
+    verbs      = ["get", "list", "watch", "update"]
+    api_groups = ["certificates.k8s.io"]
+    resources  = ["certificatesigningrequests"]
+  }
+
+  rule {
+    verbs      = ["update", "patch"]
+    api_groups = ["certificates.k8s.io"]
+    resources  = ["certificatesigningrequests/status"]
+  }
+
+  rule {
+    verbs          = ["sign"]
+    api_groups     = ["certificates.k8s.io"]
+    resources      = ["signers"]
+    resource_names = ["issuers.cert-manager.io/*", "clusterissuers.cert-manager.io/*"]
+  }
+
+  rule {
+    verbs      = ["create"]
+    api_groups = ["authorization.k8s.io"]
+    resources  = ["subjectaccessreviews"]
   }
 }

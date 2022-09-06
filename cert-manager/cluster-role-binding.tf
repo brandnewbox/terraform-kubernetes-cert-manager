@@ -46,7 +46,7 @@ resource "kubernetes_cluster_role_binding" "certificates_cluster_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.certificates_cluster_role.metadata.0.name
+    name      = kubernetes_cluster_role.controller_certificates.metadata.0.name
   }
   subject {
     kind      = "ServiceAccount"
@@ -104,6 +104,44 @@ resource "kubernetes_cluster_role_binding" "ingress-shim_cluster_role_binding" {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = kubernetes_cluster_role.ingress_shim_cluster_role.metadata.0.name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "approve_binding" {
+  metadata {
+    name = "${var.name}-approve:cert-manager-io"
+    labels = merge({
+      "app.kubernetes.io/name" = var.name
+    }, local.labels)
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.approve.metadata.0.name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account_v1.service_account.metadata.0.name
+    namespace = kubernetes_service_account_v1.service_account.metadata.0.namespace
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "controller_certificatesigningrequests_role_binding" {
+  metadata {
+    name = "${var.name}-controller-certificatesigningrequests"
+    labels = merge({
+      "app.kubernetes.io/name" = var.name
+    }, local.labels)
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.controller_certificatesigningrequests.metadata.0.name
   }
   subject {
     kind      = "ServiceAccount"
