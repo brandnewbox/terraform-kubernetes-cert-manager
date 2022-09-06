@@ -1,6 +1,6 @@
 resource "kubernetes_role_binding" "role_binding" {
   metadata {
-    name      = "${var.name}:webhook-authentication-reader"
+    name      = "${var.name}:dynamic-serving"
     namespace = var.namespace
     labels = merge({
       "app.kubernetes.io/name" = var.name
