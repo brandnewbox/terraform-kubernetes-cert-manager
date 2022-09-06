@@ -9,6 +9,7 @@ resource "kubernetes_service" "service" {
   spec {
     type = "ClusterIP"
     port {
+      name        = "tcp-prometheus-servicemonitor"
       protocol    = "TCP"
       port        = 9402
       target_port = 9402
@@ -16,6 +17,7 @@ resource "kubernetes_service" "service" {
     selector = {
       "app.kubernetes.io/name" : var.name
       "app.kubernetes.io/instance" : var.instance_id
+      "app.kubernetes.io/component": var.component
     }
   }
 }

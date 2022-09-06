@@ -11,13 +11,13 @@ resource "kubernetes_service" "service" {
     port {
       name        = "https"
       port        = 443
-      target_port = 10250
+      target_port = "https"
     }
     selector = {
       app : local.app
       "app.kubernetes.io/name" : var.name
       "app.kubernetes.io/instance" : var.instance_id
-      "app.kubernetes.io/managed-by" : "terraform"
+      "app.kubernetes.io/component" : var.component
     }
   }
 }
