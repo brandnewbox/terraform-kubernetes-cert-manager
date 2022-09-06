@@ -23,7 +23,7 @@ webhooks:
       values: ["cert-manager"]
   rules:
   - apiGroups:   ["cert-manager.io", "acme.cert-manager.io"]
-    apiVersions: ["v1alpha2"]
+    apiVersions: ["v1"]
     operations:  ["CREATE", "UPDATE"]
     resources:   ["*/*"]
   admissionReviewVersions: ["v1"]

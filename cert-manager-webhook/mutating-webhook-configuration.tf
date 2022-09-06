@@ -14,7 +14,7 @@ webhooks:
   admissionReviewVersions: ["v1"]
   rules:
   - apiGroups:   ["cert-manager.io", "acme.cert-manager.io"]
-    apiVersions: ["v1alpha2"]
+    apiVersions: ["v1"]
     operations:  ["CREATE", "UPDATE"]
     resources:   ["*/*"]
   failurePolicy: "Fail"
