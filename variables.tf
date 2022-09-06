@@ -20,7 +20,7 @@ variable "manager_image_name" {
 
 variable "cainjector_image_tag" {
   type    = string
-  default = "v1.8.1" # "v1.0.2" #"v0.13.0"
+  default = "v1.9.1" # "v1.0.2" #"v0.13.0"
 }
 variable "cainjector_image_name" {
   type    = string
@@ -29,7 +29,7 @@ variable "cainjector_image_name" {
 
 variable "webhook_image_tag" {
   type    = string
-  default = "v1.8.1" # "v1.0.2" #"v0.13.0"
+  default = "v1.9.1" # "v1.0.2" #"v0.13.0"
 }
 variable "webhook_image_name" {
   type    = string
