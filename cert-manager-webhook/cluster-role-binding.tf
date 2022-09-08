@@ -8,7 +8,7 @@ resource "kubernetes_cluster_role_binding" "cluster_role_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "system:auth-delegator"
+    name      = kubernetes_cluster_role.cluster_role.metadata.0.name
   }
   subject {
     api_group = ""
