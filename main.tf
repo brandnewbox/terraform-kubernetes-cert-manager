@@ -33,7 +33,10 @@ module "cert_manager" {
 module "cert_manager_webhook" {
   source = "./cert-manager-webhook"
 
-  depends_on = [module.custom_resource_definitions]
+  depends_on = [
+    module.custom_resource_definitions,
+    module.cert_manager_cainjector
+  ]
 
   instance_id       = local.instance_id
   namespace         = kubernetes_namespace.namespace.metadata.0.name
@@ -47,7 +50,10 @@ module "cert_manager_webhook" {
 module "cert_manager_issuers" {
   source = "./cert-manager-issuers"
 
-  depends_on = [module.custom_resource_definitions]
+  depends_on = [
+    module.custom_resource_definitions,
+    module.cert_manager_webhook
+  ]
 
   namespace   = kubernetes_namespace.namespace.metadata.0.name
   letsencrypt = var.certificate_issuers.letsencrypt

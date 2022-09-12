@@ -6,4 +6,9 @@ resource "kubernetes_service_account_v1" "service_account" {
       "app.kubernetes.io/name" = var.name
     }, local.labels)
   }
+  lifecycle {
+    ignore_changes = [
+      secret
+    ]
+  }
 }
